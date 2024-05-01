@@ -1,0 +1,116 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.3",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://m365search.blob.core.windows.net/images/session-icon-1.png",
+                            "size": "Medium",
+                            "horizontalAlignment": "Center",
+                            "altText": "session logo"
+                        }
+                    ],
+                    "height": "stretch"
+                },
+                {
+                    "type": "Column",
+                    "width": 8,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "[${title}](${url})",
+                            "color": "Accent",
+                            "size": "Large",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "**${speaker}**",
+                            "spacing": "Small",
+                            "size": "Medium",
+                            "weight": "Bolder",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "**${date}**",
+                            "spacing": "Small",
+                            "weight": "Bolder",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "**Room: ${room}**",
+                            "spacing": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Audience: ${audience}",
+                            "spacing": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Description: ${description}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": "",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Id: ${id}",
+                            "spacing": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Type: ${type}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Format: ${format}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Level: ${level}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Products: ${products}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": ""
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "URL: ${url}",
+                            "spacing": "Small",
+                            "size": "Small",
+                            "$when": ""
+                        }
+                    ],
+                    "horizontalAlignment": "Left"
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}
