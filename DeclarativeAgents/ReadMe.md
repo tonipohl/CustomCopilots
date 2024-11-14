@@ -27,7 +27,7 @@ The capabilities object serves as the foundational type within the capabilities 
 
 ~~~json
 { 
-    ...
+    
     "capabilities": [
         {
             "name": "WebSearch",
