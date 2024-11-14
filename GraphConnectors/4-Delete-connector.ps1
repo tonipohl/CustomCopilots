@@ -5,7 +5,7 @@
 # See more at https://docs.microsoft.com/en-us/graph/connecting-external-content-connectors-api-postman
 # atwork.at. Toni Pohl
 
-$connector = "M365conf"
+$connector = "Conference"
 
 $result = Invoke-RestMethod `
 -Method DELETE `

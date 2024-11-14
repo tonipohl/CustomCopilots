@@ -5,7 +5,7 @@
 # https://docs.microsoft.com/en-us/graph/connecting-external-content-connectors-api-postman#step-7---register-connection-schema
 # atwork.at. Toni Pohl
 
-$connector = "M365conf"
+$connector = "Conference"
 
 # id,title,date,speaker,room,audience,type
 # id	title	date	speaker	room	type	url	description	format	audience	level	products

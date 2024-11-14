@@ -9,7 +9,7 @@
 $now = Get-Date -Format O
 Write-Output $now
 
-$connector = "M365conf"
+$connector = "Conference"
 
 # In real world, use a GUID as Id. This here is just to simplify the Id to make it more readable.
 # $itemid = New-Guid

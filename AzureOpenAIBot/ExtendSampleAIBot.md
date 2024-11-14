@@ -4,6 +4,11 @@ This sample is based on the Bot Framework State management Bot from the BotBuild
 https://github.com/Microsoft/BotBuilder-Samples/blob/main/README.md#getting-the-samples  
 The code example below extends this bot with Azure AI Search an Azure Open AI and was initially developed by our colleague [Peter Hödl](https://github.com/peterhoedl), atwork.at.
 
+## Basis for your Bot (Agent)
+
+Navigate to the Bot Framework Samples repository on GitHub and clone the repository to your local machine. This sample is based on the **State management bot**.  
+https://github.com/Microsoft/BotBuilder-Samples/blob/main/README.md#getting-the-samples 
+
 ## Code snippte to extend a bot with Azure AI Search and Azure Open AI
 
 ```csharp

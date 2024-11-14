@@ -6,7 +6,7 @@
 # atwork.at. Toni Pohl
 
 # Note: We use this variable in the following scripts
-$connector = "M365conf"
+$connector = "Conference"
 
 $body = @"
 {

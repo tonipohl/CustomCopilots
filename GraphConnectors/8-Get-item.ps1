@@ -6,7 +6,7 @@
 # atwork.at. Toni Pohl
 
 # Get an itme by its id
-$connector = "M365Conf"
+$connector = "Conference"
 $itemid = "201"
 Write-Output $itemid
 

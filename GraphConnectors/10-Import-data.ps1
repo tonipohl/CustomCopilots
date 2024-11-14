@@ -6,8 +6,8 @@
 # atwork.at. Toni Pohl
 
 # The csv file holds some demo data to import.
-$connector = "M365Conf"
-$allsessions = Import-Csv ".\m365conf.csv" -Delimiter ";" -Encoding UTF8
+$connector = "Conference"
+$allsessions = Import-Csv ".\sessions.csv" -Delimiter ";" -Encoding UTF8
 
 $i = 1
 foreach ($session in $allsessions) {

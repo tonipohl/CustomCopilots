@@ -6,7 +6,7 @@
 # atwork.at. Toni Pohl
 
 $result = $null
-$connector = "M365conf"
+$connector = "Conference"
 
 $result = Invoke-RestMethod `
         -Method GET `

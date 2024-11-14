@@ -5,7 +5,7 @@
 # https://docs.microsoft.com/en-us/graph/connecting-external-content-connectors-api-postman
 # atwork.at. Toni Pohl
 
-$connector = "M365conf"
+$connector = "Conference"
 
 # Delete the connector:
 # DELETE /external/connections/{connectionsId}
