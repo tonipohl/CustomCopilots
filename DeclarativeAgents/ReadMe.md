@@ -1,4 +1,4 @@
-# DeclarativeAgent
+# Declarative Agents
 
 Declarative agents are customized versions of Microsoft 365 Copilot that enable customers to create personalized experiences that run in Microsoft 365 Copilot.  
 Therefore, end users require a Copilot license.  Users can build declarative agents with capabilities and instructions on their purpose and behavior. Users can also add the option to access enterprise knowledge (including SharePoint and Graph Connectors).  
