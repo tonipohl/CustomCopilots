@@ -26,7 +26,8 @@ The capabilities object serves as the foundational type within the capabilities 
 - Microsoft Graph Connectors object
 
 ~~~json
-{ …
+{ 
+    ...
     "capabilities": [
         {
             "name": "WebSearch",
@@ -48,6 +49,4 @@ The capabilities object serves as the foundational type within the capabilities 
     ]
 }
 ~~~
-
-
 
