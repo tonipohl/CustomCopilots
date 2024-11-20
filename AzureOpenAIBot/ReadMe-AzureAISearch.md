@@ -16,3 +16,6 @@ Try Azure AI Search
 
 Read more about the Azure AI Search state-of-the-art query engine:
 - https://aka.ms/AISearch-QR
+
+Azure AI @ MS Ignite 2024:
+- A one-stop shop for everything Azure AI at MS Ignite: https://aka.ms/ignite/ai
