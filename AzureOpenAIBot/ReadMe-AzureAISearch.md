@@ -5,7 +5,7 @@ Azure AI Search is a powerful search and query engine that can be used to search
 The following links are taken from Microsoft Ignite 2024 conference, BRK105 session, and provide more information about Azure AI Search:
 
 What´s new in Azure AI Search 
-- https://aka.ms/Search-new
+- https://aka.ms/AISearch-new
 
 
 Try Azure AI Search 
