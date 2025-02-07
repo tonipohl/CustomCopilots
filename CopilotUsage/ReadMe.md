@@ -10,6 +10,20 @@ Admins can use the Microsoft Graph API to get the M365 Copilot usage per user. T
 - [getMicrosoft365CopilotUserCountTrend](https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusercounttrend?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 - [getMicrosoft365CopilotUsageUserDetail](https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusageuserdetail?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 
+
+### Create an App
+
+Create an entra ID app first and add the required permissions to get access to the Graph endpoints and use the app data for authorization in your request, as here.
+
+- *Headers:*
+- Content-Type: application/json
+- *Body:*
+- Authority: https://login.microsoft.com
+- Tenant: [your-tenantid]
+- Audience: https://graph.microsoft.com/
+- Client ID: [your-appid]
+- Secret: [your-secret]
+
 The following request requires the *Reports.Read.All* permission and returns usage data of uisers for the last 7 days:
 
 ~~~
@@ -129,10 +143,29 @@ To access and filter the Security Audit Logs for Copilot interactions, you can u
 - Get auditLogQuery
 - List auditLogRecords
 
-Here's an example how to work with search queries in Graph. Create a search query:
+Here's an example how to work with search queries in Graph. 
 
-~~~
+Create a search query:
+
+~~~json
 POST https://graph.microsoft.com/beta/security/auditLog/queries
+
+{
+  "@{concat('@','odata.context')}": "https://graph.microsoft.com/beta/$metadata#security/auditLog/queries/$entity",
+  "displayName": "copilotusage-@{utcNow()}",
+  "filterStartDateTime": "2025-01-30T00:00:00Z",
+  "filterEndDateTime": "2025-02-05T00:00:00Z",
+  "recordTypeFilters": [],
+  "keywordFilter": "",
+  "serviceFilters": [],
+  "operationFilters": [
+    "copilotinteraction"
+  ],
+  "userPrincipalNameFilters": [],
+  "ipAddressFilters": [],
+  "objectIdFilters": [],
+  "administrativeUnitIdFilters": []
+}
 
 Once this is done: Get a list of search queries including their status:
 GET https://graph.microsoft.com/beta/security/auditLog/queries
@@ -216,6 +249,6 @@ Use it now!
 
 ![Governance Toolkit 365](gt365solution.png)
 
-The reports on the use of M365 Copilot are part of our ready-to-use Governance Toolkit 365.
-In addition to this report, you will find a number of ready-made solutions for Microsoft 365 there.
+The reports on the use of M365 Copilot are part of our ready-to-use [Governance Toolkit 365](https://governancetoolkit365.com/).
+In addition to these reports, you will find a number of ready-made solutions for Microsoft 365 to use in your environment there.
 
