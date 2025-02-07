@@ -137,17 +137,16 @@ However, here we get Copilot usage data, even if the org settings obfuscation re
 
 To access and filter the Security Audit Logs for Copilot interactions, you can use the Microsoft Graph API, too. This method is currently only available in Graph Beta. This endpoint requires the AuditLogsQuery.Read.All permission. The concept is the same as in the Purview portal: Create a new query, and check the status of the job. When the result is generated, you can access it. You can find the documentation at
 
-- auditLogQuery resource type
-- Create auditLogQuery
-- List auditLogQueries
-- Get auditLogQuery
-- List auditLogRecords
+- [auditLogQuery resource type](https://learn.microsoft.com/en-us/graph/api/resources/security-auditlogquery?view=graph-rest-beta&WT.mc_id=AZ-MVP-4030574)
+- [Create auditLogQuery](https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-post-auditlogqueries?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
+- [List auditLogQueries](https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-list-auditlogqueries?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
+- [Get auditLogQuery](https://learn.microsoft.com/en-us/graph/api/security-auditlogquery-get?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
+- [List auditLogRecords](https://learn.microsoft.com/en-us/graph/api/security-auditlogquery-list-records?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 
-Here's an example how to work with search queries in Graph. 
-
-Create a search query:
+Here's an example how to work with search queries in Graph.  
 
 ~~~json
+Create a search query:
 POST https://graph.microsoft.com/beta/security/auditLog/queries
 
 {
