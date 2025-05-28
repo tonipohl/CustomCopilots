@@ -1,6 +1,6 @@
 # Copilot Usage
 
-For administrators, it is vital to know which users are utilizing a Copilot license and the specific services they are engaging with. This information helps in managing licenses effectively, ensuring that resources are allocated efficiently. 
+For administrators, it is vital to know which users are utilizing a Copilot license and the specific services they are engaging with. This information helps in managing licenses effectively, ensuring that resources are allocated efficiently.  
 
 ## Get Copilot Usage with Graph Reports
 

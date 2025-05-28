@@ -1,0 +1,422 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "Recurrence": {
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Day",
+                    "timeZone": "W. Europe Standard Time",
+                    "startTime": "2024-12-30T00:00:00Z",
+                    "schedule": {
+                        "hours": [
+                            "7"
+                        ],
+                        "minutes": [
+                            0
+                        ]
+                    }
+                },
+                "evaluatedRecurrence": {
+                    "interval": 1,
+                    "frequency": "Day",
+                    "timeZone": "W. Europe Standard Time",
+                    "startTime": "2024-12-30T00:00:00Z",
+                    "schedule": {
+                        "hours": [
+                            "7"
+                        ],
+                        "minutes": [
+                            0
+                        ]
+                    }
+                },
+                "type": "Recurrence",
+                "description": "Runs weekly"
+            }
+        },
+        "actions": {
+            "foreach": {
+                "foreach": "@body('getusage')?['value']",
+                "actions": {
+                    "parsejson": {
+                        "type": "ParseJson",
+                        "inputs": {
+                            "content": "@item()?['adoptionByDate']",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "reportDate": {
+                                            "type": "string"
+                                        },
+                                        "microsoftTeamsEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "microsoftTeamsActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "wordEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "wordActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "powerPointEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "powerPointActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "outlookEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "outlookActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "excelEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "excelActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "oneNoteEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "oneNoteActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "loopEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "loopActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "anyAppEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "anyAppActiveUsers": {
+                                            "type": "integer"
+                                        },
+                                        "copilotChatEnabledUsers": {
+                                            "type": "integer"
+                                        },
+                                        "copilotChatActiveUsers": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "reportDate",
+                                        "microsoftTeamsEnabledUsers",
+                                        "microsoftTeamsActiveUsers",
+                                        "wordEnabledUsers",
+                                        "wordActiveUsers",
+                                        "powerPointEnabledUsers",
+                                        "powerPointActiveUsers",
+                                        "outlookEnabledUsers",
+                                        "outlookActiveUsers",
+                                        "excelEnabledUsers",
+                                        "excelActiveUsers",
+                                        "oneNoteEnabledUsers",
+                                        "oneNoteActiveUsers",
+                                        "loopEnabledUsers",
+                                        "loopActiveUsers",
+                                        "anyAppEnabledUsers",
+                                        "anyAppActiveUsers",
+                                        "copilotChatEnabledUsers",
+                                        "copilotChatActiveUsers"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "foreachproduct": {
+                        "foreach": "@outputs('parsejson')['body']",
+                        "actions": {
+                            "insertormergeitem": {
+                                "type": "ApiConnection",
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        }
+                                    },
+                                    "method": "patch",
+                                    "body": {
+                                        "year": "@formatDateTime(items('foreachproduct')?['reportDate'],'yyyy')",
+                                        "week": "@{concat(\r\n    formatDateTime(items('foreachproduct')?['reportDate'], 'yyyy'),\r\n    '-',\r\n    formatNumber(add(div(dayOfYear(items('foreachproduct')?['reportDate']), 7), 1), '00')\r\n)}",
+                                        "reportDate": "@{items('foreachproduct')?['reportDate']}",
+                                        "reportRefreshDate": "@{items('foreach')?['reportRefreshDate']}",
+                                        "microsoftTeamsEnabledUsers": "@items('foreachproduct')?['microsoftTeamsEnabledUsers']",
+                                        "microsoftTeamsActiveUsers": "@items('foreachproduct')?['microsoftTeamsActiveUsers']",
+                                        "wordEnabledUsers": "@items('foreachproduct')?['wordEnabledUsers']",
+                                        "wordActiveUsers": "@items('foreachproduct')?['wordActiveUsers']",
+                                        "powerPointEnabledUsers": "@items('foreachproduct')?['powerPointEnabledUsers']",
+                                        "powerPointActiveUsers": "@items('foreachproduct')?['powerPointActiveUsers']",
+                                        "outlookEnabledUsers": "@items('foreachproduct')?['outlookEnabledUsers']",
+                                        "outlookActiveUsers": "@items('foreachproduct')?['outlookActiveUsers']",
+                                        "excelEnabledUsers": "@items('foreachproduct')?['excelEnabledUsers']",
+                                        "excelActiveUsers": "@items('foreachproduct')?['excelActiveUsers']",
+                                        "oneNoteEnabledUsers": "@items('foreachproduct')?['oneNoteEnabledUsers']",
+                                        "oneNoteActiveUsers": "@items('foreachproduct')?['oneNoteActiveUsers']",
+                                        "loopEnabledUsers": "@items('foreachproduct')?['loopEnabledUsers']",
+                                        "loopActiveUsers": "@items('foreachproduct')?['loopActiveUsers']",
+                                        "anyAppEnabledUsers": "@items('foreachproduct')?['anyAppEnabledUsers']",
+                                        "anyAppActiveUsers": "@items('foreachproduct')?['anyAppActiveUsers']",
+                                        "copilotChatEnabledUsers": "@items('foreachproduct')?['copilotChatEnabledUsers']",
+                                        "copilotChatActiveUsers": "@items('foreachproduct')?['copilotChatActiveUsers']"
+                                    },
+                                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent(variables('config')?['tabletrend'])}/entities(PartitionKey='@{encodeURIComponent(formatDateTime(items('foreachproduct')?['reportDate'],'yyyy-MM'))}',RowKey='@{encodeURIComponent(items('foreachproduct')?['reportDate'])}')"
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "parsejson": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "Foreach"
+                    },
+                    "appendbody": {
+                        "runAfter": {
+                            "foreachproduct": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "AppendToStringVariable",
+                        "inputs": {
+                            "name": "body",
+                            "value": "Report Refresh Date: <strong>@{items('foreach')?['reportRefreshDate']}</strong><br>\nReport Period: @{items('foreach')?['reportPeriod']} days<br>\nNumber of Days Returned: @{length(item()?['adoptionByDate'])}<br>\nCreated at: @{variables('run')}"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "getusage": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "getusage": {
+                "runAfter": {
+                    "getsecret": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://graph.microsoft.com/beta/reports/getMicrosoft365CopilotUserCountTrend(period='ALL')",
+                    "method": "GET",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "authentication": {
+                        "audience": "https://graph.microsoft.com/",
+                        "authority": "https://login.microsoft.com",
+                        "clientId": "@variables('app')?['clientId']",
+                        "secret": "@body('getsecret')?['value']",
+                        "tenant": "@variables('app')?['tenantId']",
+                        "type": "ActiveDirectoryOAuth"
+                    }
+                },
+                "description": "https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusercounttrend?view=graph-rest-beta&tabs=http\nThe supported values are: D7, D30, D90, D180, ALL\nRequired app permissions: Reports.Read.All",
+                "runtimeConfiguration": {
+                    "paginationPolicy": {
+                        "minimumItemCount": 99999
+                    }
+                }
+            },
+            "getsecret": {
+                "runAfter": {
+                    "inititems": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('secret')}/value"
+                }
+            },
+            "initAppConfig": {
+                "runAfter": {
+                    "initConfig": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "app",
+                            "type": "object",
+                            "value": {
+                                "tenantId": "f89d8982-a030-4c14-9b60-8dbd82b66428",
+                                "clientId": "fa0a1787-39d1-4d73-b25a-dc92968863a1"
+                            }
+                        }
+                    ]
+                }
+            },
+            "initConfig": {
+                "runAfter": {
+                    "initrun": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "config",
+                            "type": "object",
+                            "value": {
+                                "tableuser": "CopilotUsageUser",
+                                "tabletrend": "CopilotUsageTrend",
+                                "tablequeries": "Queries",
+                                "tablelog": "Log",
+                                "inactivitywarning": 30,
+                                "adminEmail": "<email>",
+                                "debug": false
+                            }
+                        }
+                    ]
+                }
+            },
+            "initemailtemplate": {
+                "runAfter": {},
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "emailtemplate",
+                            "type": "string",
+                            "value": "Hello admin,<br><br>Here are the Copilot usage details for the last 7 days:<br><br>[items]<br><br>Report run: [run]<br><br>Best regards,<br>GT365 Team"
+                        }
+                    ]
+                }
+            },
+            "initrun": {
+                "runAfter": {
+                    "initemailtemplate": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "run",
+                            "type": "string",
+                            "value": "@formatDateTime(utcNow(),'yyyy-MM-dd')"
+                        }
+                    ]
+                }
+            },
+            "scopemail": {
+                "actions": {
+                    "sendmail": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['office365']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "body": {
+                                "To": "@{variables('config')?['adminEmail']}",
+                                "Subject": "GT365: M365 Copilot Usage Trend",
+                                "Body": "<p class=\"editor-paragraph\">@{replace(replace(variables('emailtemplate'),'[items]',variables('body')),'[run]',variables('run'))}</p>",
+                                "Importance": "Normal"
+                            },
+                            "path": "/v2/Mail"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "foreach": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Scope"
+            },
+            "initbody": {
+                "runAfter": {
+                    "initAppConfig": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "body",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "inititems": {
+                "runAfter": {
+                    "initbody": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "items",
+                            "type": "array"
+                        }
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "azuretables": {
+                    "id": "/subscriptions/<subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/azuretables",
+                    "connectionId": "/subscriptions/<subscription-id>/resourceGroups/RG-Copilot/providers/Microsoft.Web/connections/azuretables",
+                    "connectionName": "azuretables"
+                },
+                "keyvault": {
+                    "id": "/subscriptions/<subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/keyvault",
+                    "connectionId": "/subscriptions/<subscription-id>/resourceGroups/RG-Copilot/providers/Microsoft.Web/connections/keyvault",
+                    "connectionName": "keyvault",
+                    "connectionProperties": {
+                        "authentication": {
+                            "identity": "/subscriptions/<subscription-id>/resourceGroups/RG-Copilot/providers/Microsoft.ManagedIdentity/userAssignedIdentities/UAMImdwhijdq4y",
+                            "type": "ManagedServiceIdentity"
+                        }
+                    }
+                },
+                "office365": {
+                    "id": "/subscriptions/<subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/office365",
+                    "connectionId": "/subscriptions/<subscription-id>/resourceGroups/RG-Copilot/providers/Microsoft.Web/connections/office365",
+                    "connectionName": "office365"
+                }
+            }
+        }
+    }
+}
