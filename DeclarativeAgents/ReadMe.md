@@ -26,27 +26,28 @@ The capabilities object serves as the foundational type within the capabilities 
 - Microsoft Graph Connectors object
 
 ~~~json
-{ 
-    
-    "capabilities": [
-        {
-            "name": "WebSearch",
-            "search_terms": [ "M365 Compliance Center", … ]
-
-        },
-        {
-            "name": "OneDriveAndSharePoint",
-            "items_by_url": [
-                {"url": "${{SP_SITE_URL}}" }, … 
-            ]
-        },
-        {
-            "name": "GraphConnectors",
-            "connections": [
-                { "connection_id": "Conference" }
-            ]
-        }
-    ]
+{
+    "capabilities": [
+        {
+            "name": "WebSearch",
+            "search_terms": [ "M365 Compliance Center" ]
+        },
+        {
+            "name": "OneDriveAndSharePoint",
+            "items_by_url": [
+                {
+                    "url": "${{SP_SITE_URL}}"
+                }
+            ]
+        },
+        {
+            "name": "GraphConnectors",
+            "connections": [
+                {
+                    "connection_id": "Conference"
+                }
+            ]
+        }
+    ]
 }
 ~~~
-

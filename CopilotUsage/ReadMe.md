@@ -1,34 +1,48 @@
 # Copilot Usage
 
-For administrators, it is vital to know which users are utilizing a Copilot license and the specific services they are engaging with. This information helps in managing licenses effectively, ensuring that resources are allocated efficiently.  
+Microsoft 365 Copilot usage data provides administrators with insights into license utilization and user activity across Copilot services. This information can be used to monitor adoption, identify active and inactive licenses, and support license optimization.
 
 ## Get Copilot Usage with Graph Reports
 
-Admins can use the Microsoft Graph API to get the M365 Copilot usage per user. This method is currently only available in Graph Beta. See the available endpoint documentation here:
+Microsoft Graph Reports provides endpoints for retrieving Microsoft 365 Copilot usage data at the user level. These APIs allow administrators to programmatically collect usage information for reporting and analysis. The corresponding endpoints are available through Microsoft Graph.
 
-- [getMicrosoft365CopilotUserCountSummary](https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusercountsummary?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
-- [getMicrosoft365CopilotUserCountTrend](https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusercounttrend?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
-- [getMicrosoft365CopilotUsageUserDetail](https://learn.microsoft.com/en-us/graph/api/reportroot-getmicrosoft365copilotusageuserdetail?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
+- [copilotReportRoot: getMicrosoft365CopilotUserCountSummary](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusercountsummary?pivots=graph-v1&WT.mc_id=AZ-MVP-4030574)
+- [copilotReportRoot: getMicrosoft365CopilotUserCountTrend](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusercounttrend?pivots=graph-v1&WT.mc_id=AZ-MVP-4030574)
+- [copilotReportRoot: getMicrosoft365CopilotUsageUserDetail](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusageuserdetailbydate?WT.mc_id=AZ-MVP-4030574)
+- [copilotReportRoot: getMicrosoft365CopilotUsageUserDetailByDate (preview)](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusageuserdetailbydate?WT.mc_id=AZ-MVP-4030574)
 
+Note: Check out the **Agent 365 API** at [Agent 365 Package Management API overview](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/package/overview?WT.mc_id=AZ-MVP-4030574).
 
 ### Create an App
 
-Create an entra ID app first and add the required permissions to get access to the Graph endpoints and use the app data for authorization in your request, as here.
+Create an app registration in Microsoft Entra ID and grant the required Microsoft Graph application permissions, see [Register an application with the Microsoft identity platform](https://learn.microsoft.com/en-us/graph/auth-register-app-v2?WT.mc_id=AZ-MVP-4030574).
 
-- *Headers:*
-- Content-Type: application/json
-- *Body:*
-- Authority: https://login.microsoft.com
-- Tenant: [your-tenantid]
-- Audience: https://graph.microsoft.com/
-- Client ID: [your-appid]
-- Secret: [your-secret]
+Use the application's credentials to authenticate against Microsoft Graph and retrieve Copilot usage data, as demonstrated in the following example.
+
+~~~json
+{
+  "type": "Http",
+  "inputs": {
+    "uri": "https://graph.microsoft.com/v1.0/copilot/reports/getMicrosoft365CopilotUsageUserDetail(period='D7')",
+    "method": "GET",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "authentication": {
+      "audience": "https://graph.microsoft.com/",
+      "authority": "https://login.microsoft.com",
+      "clientId": "[your-appid]",
+      "secret": "[your-secret]",
+      "tenant": "[your-tenantid]",
+      "type": "ActiveDirectoryOAuth"
+    }
+  }
+}
+~~~
 
 The following request requires the *Reports.Read.All* permission and returns usage data of uisers for the last 7 days:
 
-~~~
-GET https://graph.microsoft.com/beta/reports/getMicrosoft365CopilotUsageUserDetail(period='D7')
-~~~
+> GET https://graph.microsoft.com/v1.0/copilot/reports/getMicrosoft365CopilotUsageUserDetail(period='D7')
 
 The supported values for the period are *D7, D30, D90, D180*, and *ALL* (where *ALL* equals *D180*). The response looks similar as here:
 
@@ -36,16 +50,16 @@ The supported values for the period are *D7, D30, D90, D180*, and *ALL* (where *
 {
     "value": [
         {
-            "reportRefreshDate": "2025-01-21",
+            "reportRefreshDate": "2026-10-22",
             "userPrincipalName": "AdeleV@mytenant.onmicrosoft.com",
             "displayName": "Adele Vance",
-            "lastActivityDate": "2024-12-21",
+            "lastActivityDate": "2026-10-21",
             "copilotChatLastActivityDate": "",
             "microsoftTeamsCopilotLastActivityDate": "",
             "wordCopilotLastActivityDate": "",
             "excelCopilotLastActivityDate": "",
             "powerPointCopilotLastActivityDate": "",
-            "outlookCopilotLastActivityDate": "2024-12-21",
+            "outlookCopilotLastActivityDate": "2026-10-21",
             "oneNoteCopilotLastActivityDate": "",
             "loopCopilotLastActivityDate": "",
             "copilotActivityUserDetailsByPeriod": [
@@ -82,10 +96,10 @@ When the setting above is enabled, the Graph query returns random user data like
 {
     "value": [
         {
-            "reportRefreshDate": "2025-01-21",
+            "reportRefreshDate": "2026-10-22",
             "userPrincipalName": "04ED172AFFD17C931C567960999335F9",
             "displayName": "55F1D13D475D53DD4FA55E740CDD4032",
-            "lastActivityDate": "2024-12-21",
+            "lastActivityDate": "2026-10-21",
             ...,
             "copilotActivityUserDetailsByPeriod": [
                 { "reportPeriod": 7 }
@@ -103,6 +117,8 @@ We cannot draw any conclusions about the users, their company, department or reg
 ## Using the Microsoft 365 Security Audit Logs
 
 To our rescue: The Microsoft 365 Security Audit Logs provide a comprehensive view of user activities, including interactions with Copilot. These logs capture detailed information about each interaction, such as the user involved, the time of the interaction, and the specific actions taken. This level of detail is essential for administrators who need to monitor usage patterns, identify potential issues, and ensure compliance with organizational policies. Thankfully, access to M365 Copilot can also be found here.
+
+See a description at [Use Microsoft 365 audit logs with Microsoft Graph Data Connect](https://learn.microsoft.com/en-us/graph/microsoft365-audit-logs?WT.mc_id=AZ-MVP-4030574).
 
 ### Search in the Purview Portal
 
@@ -138,55 +154,46 @@ However, here we get Copilot usage data, even if the org settings obfuscation re
 To access and filter the Security Audit Logs for Copilot interactions, you can use the Microsoft Graph API, too. This method is currently only available in Graph Beta. This endpoint requires the AuditLogsQuery.Read.All permission. The concept is the same as in the Purview portal: Create a new query, and check the status of the job. When the result is generated, you can access it. You can find the documentation at
 
 - [auditLogQuery resource type](https://learn.microsoft.com/en-us/graph/api/resources/security-auditlogquery?view=graph-rest-beta&WT.mc_id=AZ-MVP-4030574)
-- [Create auditLogQuery](https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-post-auditlogqueries?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
+- [Create auditLogQuery](https://learn.microsoft.com/en-us/graph/api/security-auditlogquery-get?view=graph-rest-1.0&tabs=http&WT.mc_id=AZ-MVP-4030574)
 - [List auditLogQueries](https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-list-auditlogqueries?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 - [Get auditLogQuery](https://learn.microsoft.com/en-us/graph/api/security-auditlogquery-get?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 - [List auditLogRecords](https://learn.microsoft.com/en-us/graph/api/security-auditlogquery-list-records?view=graph-rest-beta&tabs=http&WT.mc_id=AZ-MVP-4030574)
 
-Here's an example how to work with search queries in Graph.  
+Here's an example how to work with search queries in Graph. Create a new search query:
+
+> POST https://graph.microsoft.com/v1.0/security/auditLog/queries
 
 ~~~json
-Create a search query:
-POST https://graph.microsoft.com/beta/security/auditLog/queries
-
 {
-  "@{concat('@','odata.context')}": "https://graph.microsoft.com/beta/$metadata#security/auditLog/queries/$entity",
-  "displayName": "copilotusage-@{utcNow()}",
-  "filterStartDateTime": "2025-01-30T00:00:00Z",
-  "filterEndDateTime": "2025-02-05T00:00:00Z",
-  "recordTypeFilters": [],
-  "keywordFilter": "",
-  "serviceFilters": [],
+  "filterStartDateTime": "2026-10-01T00:00:00Z",
+  "filterEndDateTime": "2026-11-01T00:00:00Z",
   "operationFilters": [
-    "copilotinteraction"
-  ],
-  "userPrincipalNameFilters": [],
-  "ipAddressFilters": [],
-  "objectIdFilters": [],
-  "administrativeUnitIdFilters": []
+    "copilotinteraction",
+    "configuredcopilot"    
+  ]
 }
+~~~
 
 Once this is done: Get a list of search queries including their status:
-GET https://graph.microsoft.com/beta/security/auditLog/queries
+> GET https://graph.microsoft.com/v1.0/security/auditLog/queries
 
 Get the status of one specific search query:
-GET https://graph.microsoft.com/beta/security/auditLog/queries/<queryid> 
+> GET https://graph.microsoft.com/v1.0/security/auditLog/queries/<queryid> 
 
 Get the result of a search query (when "status": "succeeded"):
-GET https://graph.microsoft.com/beta/security/auditLog/queries/<queryid>/records 
-~~~
+> GET https://graph.microsoft.com/v1.0/security/auditLog/queries/<queryid>/records 
 
 Here´s a (shortened) sample result. Note that the including data depends on the service itself, so the auditData can look completely different for various services.
 
 ~~~json
 {
-    "@odata.context": "https://graph.microsoft.com/beta/$metadata#security/auditLog/queries('1177737b-a8ed-4e8c-acb8-d4c2201f2af5')/records",
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#security/auditLog/queries('1177737b-a8ed-4e8c-acb8-d4c2201f2af5')/records",
     "@odata.count": 2,
     "@microsoft.graph.tips": "Use $select ...: GET security/auditLog/queries('<guid>')/records?$select=administrativeUnits,auditData",
     "value": [
         {
             "id": "<someid>",
-            "createdDateTime": "2025-01-11T16:23:43Z",
+            "createdDateTime": "2026-10-02T16:23:43Z",
             "operation": "CopilotInteraction",
             "userId": "<userid>",
             "userPrincipalName": "AdeleV@mytenant.onmicrosoft.com",
@@ -194,7 +201,7 @@ Here´s a (shortened) sample result. Note that the including data depends on the
             "administrativeUnits": [ "" ],
             "auditData": {
                 "Operation": "CopilotInteraction",
-                ...,
+                ...
                 "CopilotEventData": {
                     "AppHost": "Outlook",
                     "ThreadId": "<someid>@thread.v2",
@@ -232,22 +239,20 @@ Here´s a (shortened) sample result. Note that the including data depends on the
 
 The result therefore provides more or less at least information about the users and the type of copilot request.
 
-## More resources
-
-In addition to the Microsoft Graph documentation find more resources here:
-
-- [Search the audit log](https://learn.microsoft.com/en-us/purview/audit-search?view=o365-worldwide&tabs=microsoft-purview-portal&WT.mc_id=AZ-MVP-4030574)
-- [The four ways to build your own Copilot usage & adoption reports](https://www.loryanstrant.com/2025/01/13/the-four-ways-to-build-your-own-copilot-usage-adoption-reports/)
-- [Hijacking Viva Insights to build a meaningful Microsoft 365 Copilot usage report](https://www.loryanstrant.com/2025/01/22/hijacking-viva-insights-to-build-a-meaningful-microsoft-365-copilot-usage-report/)
-
 ## Conclusion
 
-Although graph reports are useful for general insights and trend analysis, they fail when the organization's report anonymization feature is enabled. In this case, Security Audit Logs provide the granularity needed to make informed decisions about the usage of Copilot. For administrators seeking detailed insights into Microsoft 365 Copilot usage, Security Audit Logs offer a powerful alternative to Graph Reports. By leveraging these logs, organizations can gain a clearer understanding of how Copilot is being used, identify opportunities for improvement, and ensure compliance with internal and external requirements.
+Microsoft Graph Reports are a useful source for analyzing Microsoft 365 Copilot adoption and usage. However, report anonymization can limit user-level insights.
 
-Use it now!
+Microsoft Purview Audit logs provide an alternative for analyzing Copilot activity at a more granular level. This enables administrators to better understand adoption, optimize license utilization, and support governance and compliance requirements.
+
+Use the examples in this repository to explore Copilot usage in your own environment.
+
+## Get the insights without building the solution
+
+Want these insights without implementing and maintaining the reporting yourself? [Governance Toolkit 365](https://governancetoolkit365.com/) provides ready-to-use insights into your Microsoft 365 tenant, including Copilot usage and adoption.
 
 ![Governance Toolkit 365](gt365solution.png)
 
-The reports on the use of M365 Copilot are part of our ready-to-use [Governance Toolkit 365](https://governancetoolkit365.com/).
-In addition to these reports, you will find a number of ready-made solutions for Microsoft 365 to use in your environment there.
+See what's happening in your Microsoft 365 tenant and make your data actionable.
 
+[Governance Toolkit 365](https://governancetoolkit365.com/).
