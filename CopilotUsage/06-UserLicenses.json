@@ -1,0 +1,149 @@
+{
+    "definition": {
+        "metadata": {
+            "notes": {
+                "A14F7133-0C2C-4E71-911F-59F7FD8AA1DF": {
+                    "content": "Get ther user´s last sign-in",
+                    "color": "#FFFBCC",
+                    "metadata": {
+                        "position": {
+                            "x": 260,
+                            "y": 620
+                        },
+                        "width": 200,
+                        "height": 44
+                    }
+                }
+            }
+        },
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http"
+            }
+        },
+        "actions": {
+            "getuserlicenses": {
+                "type": "Http",
+                "description": "Required app permissions: Reports.Read.All",
+                "inputs": {
+                    "uri": "https://graph.microsoft.com/v1.0/users?$select=id,displayName,userPrincipalName,assignedLicenses",
+                    "method": "GET",
+                    "authentication": {
+                        "audience": "https://graph.microsoft.com/",
+                        "authority": "https://login.microsoft.com",
+                        "clientId": "@variables('app')?['clientId']",
+                        "secret": "@body('getsecret')?['value']",
+                        "tenant": "@variables('app')?['tenantId']",
+                        "type": "ActiveDirectoryOAuth"
+                    }
+                },
+                "runAfter": {
+                    "getsecret": [
+                        "Succeeded"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "paginationPolicy": {
+                        "minimumItemCount": 99999
+                    }
+                }
+            },
+            "getsecret": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('secret')}/value"
+                },
+                "runAfter": {
+                    "initAppConfig": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "initAppConfig": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "app",
+                            "type": "object",
+                            "value": {
+                                "tenantId": "f89d8982-a030-4c14-9b60-8dbd82b66428",
+                                "clientId": "f18fea74-92c0-45a4-94b9-c0a08edb4f58"
+                            }
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "initConfig": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "initConfig": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "config",
+                            "type": "object",
+                            "value": {
+                                "tableuser": "CopilotUsageUser",
+                                "tabletrend": "CopilotUsageTrend",
+                                "tablequeries": "Queries",
+                                "tablelog": "Log",
+                                "inactivitywarning": 30,
+                                "adminEmail": "toni@tpe5.onmicrosoft.com",
+                                "debug": false
+                            }
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "result": {
+                "type": "Compose",
+                "description": "Decode from base64 to string",
+                "inputs": "@body('getuserlicenses')",
+                "runAfter": {
+                    "getuserlicenses": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "keyvault": {
+                    "id": "/subscriptions/<subscription-id>/providers/Microsoft.Web/locations/westeurope/managedApis/keyvault",
+                    "connectionId": "/subscriptions/<subscription-id>/resourceGroups/RG-CopilotUsage/providers/Microsoft.Web/connections/keyvault",
+                    "connectionName": "keyvault",
+                    "connectionProperties": {
+                        "authentication": {
+                            "identity": "/subscriptions/<subscription-id>/resourceGroups/RG-CopilotUsage/providers/Microsoft.ManagedIdentity/userAssignedIdentities/UAMIpleiqfsyc3",
+                            "type": "ManagedServiceIdentity"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
